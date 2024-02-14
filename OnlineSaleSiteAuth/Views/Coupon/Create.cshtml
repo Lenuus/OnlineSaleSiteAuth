@@ -1,0 +1,101 @@
+﻿@model AddCouponRequestModel
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-4" style="margin-bottom:20px;">
+            <div class="row">
+                <div class="col-md-12" style="margin-bottom:5px">
+                    <span>StartDate: </span>
+                </div>
+                <div class="col-md-12" style="margin-top: -5px;">
+                    <input asp-for="StartDate" class="form-control ms-0" />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4" style="margin-bottom:20px;">
+            <div class="row">
+                <div class="col-md-12" style="margin-bottom:5px">
+                    <span>EndDate: </span>
+                </div>
+                <div class="col-md-12" style="margin-top: -5px;">
+                    <input asp-for="EndDate" class="form-control ms-0" />
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4" style="margin-bottom:20px;">
+            <div class="row">
+                <div class="col-md-12" style="margin-bottom:5px">
+                    <span>DiscountRate: </span>
+                </div>
+                <div class="col-md-12" style="margin-top: -5px;">
+                    <input asp-for="DiscountRate" class="form-control ms-0" />
+                    <span asp-validation-for="DiscountRate" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4" style="margin-bottom:20px;">
+            <div class="row">
+                <div class="col-md-12" style="margin-bottom:5px">
+                    <span>Products: </span>
+                </div>
+                <div class="col-md-12" style="margin-top: -5px;">
+                    <select asp-for="ProductId" asp-items="@ViewBag.Products" class="form-control">
+                    </select>
+                    <span asp-validation-for="ProductId" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4" style="margin-bottom:20px;">
+            <div class="row">
+                <div class="col-md-12" style="margin-bottom:5px">
+                    <span>Coupon Code </span>
+                </div>
+                <div class="col-md-12" style="margin-top: -5px;">
+                    <input asp-for="CouponCode" class="form-control ms-0" readonly />
+                    <span asp-validation-for="CouponCode" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" id="generateCouponBtn" class="btn btn-primary btn-block">Kupon Oluştur</button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-success btn-block">Oluştur</button>
+        </div>
+    </div>
+
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#generateCouponBtn').click(function () {
+                $.ajax({
+                    url: '/Coupon/CouponGenerator', 
+                    type: 'POST',
+                    success: function (data) {
+                        $('#CouponCode').val(data);
+                    },
+                    error: function () {
+                        alert('Kupon oluşturulurken bir hata oluştu.');
+                    }
+                });
+            });
+        });
+    </script>
+}

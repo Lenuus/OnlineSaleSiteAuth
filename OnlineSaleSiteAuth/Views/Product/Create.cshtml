@@ -1,0 +1,75 @@
+﻿@model AddProductRequestModel
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-4" style="margin-bottom:20px;">
+            <div class="row">
+                <div class="col-md-12" style="margin-bottom:5px">
+                    <span>Name: </span>
+                </div>
+                <div class="col-md-12" style="margin-top: -5px;">
+                    <input asp-for="Name" class="form-control ms-0" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4" style="margin-bottom:20px;">
+            <div class="row">
+                <div class="col-md-12" style="margin-bottom:5px">
+                    <span>Stock: </span>
+                </div>
+                <div class="col-md-12" style="margin-top: -5px;">
+                    <input asp-for="Stock" class="form-control ms-0" />
+                    <span asp-validation-for="Stock" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4" style="margin-bottom:20px;">
+            <div class="row">
+                <div class="col-md-12" style="margin-bottom:5px">
+                    <span>Price: </span>
+                </div>
+                <div class="col-md-12" style="margin-top: -5px;">
+                    <input asp-for="Price" class="form-control ms-0" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4" style="margin-bottom:20px;">
+            <div class="row">
+                <div class="col-md-12" style="margin-bottom:5px">
+                    <span>Categories: </span>
+                </div>
+                <div class="col-md-12" style="margin-top: -5px;">
+                    <select asp-for="Categories" asp-items="@ViewBag.Categories" class="form-control" multiple>
+                    </select>
+                    <span asp-validation-for="Categories" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4" style="margin-bottom:20px;">
+            <div class="row">
+                <div class="col-md-12" style="margin-bottom:5px">
+                    <span>Resimler: </span>
+                </div>
+                <div class="col-md-12" style="margin-top: -5px;">
+                    <input asp-for="Images" type="file" multiple class="form-control ms-0" accept="image/jpeg, image/png" />
+                    <span asp-validation-for="Images" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-success btn-block">Oluştur</button>
+        </div>
+    </div>
+</form>

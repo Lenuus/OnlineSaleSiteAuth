@@ -1,0 +1,190 @@
+﻿@model PagedResponseModel<ProductListModel>
+@{
+    var search = @ViewContext.HttpContext.Request.Query["Search"];
+    var pageIndex = @ViewContext.HttpContext.Request.Query["PageIndex"].SingleOrDefault() ?? "0";
+    var pageSize = @ViewContext.HttpContext.Request.Query["PageSize"].SingleOrDefault() ?? int.MaxValue.ToString();
+}
+<div id="cartContainer" style="float:right; margin-top: 20px; height:200px">
+    <a href="/Basket/Index" class="btn btn-lg position-relative" id="cartButton">
+        <i class="fa fa-shopping-cart fa-2x" aria-hidden="true"></i>
+        <span id="cartCount" class="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle p-1" style="font-size: 0.8em;">
+            @ViewBag.TotalItemCount
+        </span>
+    </a>
+</div>
+<form asp-action="Index" method="get" id="pagedList">
+    <a asp-action="Create" class="btn btn-success" style="margin-top: 20px; margin-bottom:20px;">Add Product</a><br />
+    <div class="container">
+        <div class="row">
+            <div class="col-8">
+                <div class="input-group">
+                    <input type="text" name="Search" value="@search" class="form-control" style="margin-bottom: 20px; max-width:70%" />
+                    <div class="input-group-append ml-2" style="margin-bottom: 20px;">
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Order</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Stock</th>
+                <th>Category</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var counter = 1;
+            }
+
+            @foreach (var product in Model.Data)
+            {
+                <tr id="product_@product.Id">
+                    <td>
+                        @counter
+                    </td>
+                    <td>
+                        @foreach (var i in product.Images)
+                        {
+                            <img src="@i.Path" style="max-width: 100px; max-height: 100px;" />
+                        }
+                    </td>
+                    <td>@product.Name</td>
+                    <td>@product.Stock</td>
+                    <td>
+                        @foreach (var c in product.Categories)
+                        {
+                            @c.Name
+                            if (product.Categories.IndexOf(c) != product.Categories.Count - 1)
+                            {
+                                @:,
+                            }
+                        }
+                    </td>
+                    <td>@product.Price</td>
+                    <td>
+                        <button type="button" class="btn btn-danger btnDelete" data-id="@product.Id">
+                            <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="btn btn-success btnAdd" data-id="@product.Id">
+                            <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+                        </button>
+                        <a href="/Product/Update/@product.Id" class="btn btn-primary">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                </tr>
+                counter++;
+            }
+        </tbody>
+    </table>
+    <div style="float:left;">
+        @for (int i = 0; i < Model.TotalPage; i++)
+        {
+            <button type="submit" value="@i" class="btn @(pageIndex == i.ToString() ? "btn-success": "btn-info")" name="PageIndex">@(i + 1)</button>
+        }
+    </div>
+    <select name="PageSize" class="form-control" style="float:right; width:200px;" onchange="document.getElementById('pagedList').submit()">
+        <!option value="1" @(pageSize == "1" ? "selected" : string.Empty)>
+        1
+        </!option>
+        <!option value="5" @(pageSize == "5" ? "selected" : string.Empty)>
+        5
+        </!option>
+        <!option value="20" @(pageSize == "20" ? "selected" : string.Empty)>
+        20
+        </!option>
+        <!option value="50" @(pageSize == "50" ? "selected" : string.Empty)>
+        50
+        </!option>
+        <!option value="100" @(pageSize == "100" ? "selected" : string.Empty)>
+        100
+        </!option>
+        <!option value="@int.MaxValue" @(pageSize == int.MaxValue.ToString() ? "selected" : string.Empty)>
+        Hepsi
+        </!option>
+    </select>
+</form>
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            console.log('this is run on page load');
+            updateCartContent();
+        });
+
+        $(function () {
+            $(".btnDelete").click(function () {
+                var id = $(this).attr("data-id");
+                if (confirm("Silmek istediğinizden emin misiniz?")) {
+                    $.ajax({
+                        url: "/Product/Delete/" + id,
+                        type: "DELETE",
+                        success: function (response) {
+                            $("#product_" + id).remove();
+                            console.log("Başarılı", response);
+                            updateOrderCounts();
+                        },
+                        error: function (response) {
+                            console.log("Hata: ", response);
+                        }
+                    })
+                }
+            });
+        });
+
+        function updateOrderCounts() {
+            $("tbody tr").each(function (index) {
+                $(this).find("td:first-child").text(index + 1);
+            });
+        }
+
+
+        $(function () {
+            $(".btnAdd").click(function () {
+                var id = $(this).attr("data-id");
+                var quantity = 1;
+                console.log("Ürün ID'si:", id);
+                if (confirm("Eklemek istediğinize emin misiniz?")) {
+                    var product = {
+                        ProductId: id,
+                        Quantity: quantity,
+                    };
+                    $.ajax({
+                        type: "POST",
+                        data: JSON.stringify(product),
+                        url: "/Basket/Create",
+                        contentType: "application/json",
+                        success: function (response) {
+                            console.log("Başarılı", response);
+                            updateCartContent()
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', error);
+                            alert(xhr.responseText);
+                        }
+                    });
+                }
+            });
+        });
+        function updateCartContent() {
+            $.ajax({
+                url: "/Basket/GetCount",
+                type: "GET",
+                success: function (response) {
+                    $("#cartCount").text(response);
+                },
+                error: function (response) {
+                    console.log("Hata: ", response);
+                }
+            });
+        }
+    </script>
+}

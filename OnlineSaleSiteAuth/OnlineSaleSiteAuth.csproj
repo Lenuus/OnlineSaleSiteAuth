@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-OnlineSaleSiteAuth-b7313200-9f9d-4e15-9cc8-26b36ab839aa</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Collection" Version="9.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OnlineSalesAuth.Persistence\OnlineSalesAuth.Persistence.csproj" />
+    <ProjectReference Include="..\OnlineSaleSiteAuth.Application\OnlineSaleSiteAuth.Application.csproj" />
+    <ProjectReference Include="..\OnlineSaleSiteAuth.Common\OnlineSaleSiteAuth.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
+</Project>

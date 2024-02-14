@@ -1,0 +1,111 @@
+﻿@model UpdateProductRequestModel
+@{
+    var categories = (SelectList)ViewBag.Categories;
+}
+
+<h2>Ürünü Güncelle</h2>
+
+<form asp-action="Update" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Price" class="control-label"></label>
+        <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Stock" class="control-label"></label>
+        <input asp-for="Stock" class="form-control" />
+        <span asp-validation-for="Stock" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Kategoriler</label>
+        <select name="SelectedCategories" class="form-control" multiple>
+            @foreach (var category in categories)
+            {
+                <!option value="@category.Value" @(Model.Categories.Any(f => f.Id.ToString() == category.Value) ? "selected" : "")>@category.Text</!option>
+            }
+        </select>
+        <span asp-validation-for="Categories" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Images" class="control-label"></label>
+        @foreach (var image in Model.Images)
+        {
+            <div class="row" id="image_@image.Id" style="margin-bottom:10px;">
+                <div class="col-md-4">
+                    <img src="@image.Path" class="img-thumbnail" />
+                </div>
+                <div class="col-md-8">
+                    <button type="button" name="@image.Path" value="@image.Id" class="btn btn-danger btnDelete" data-id="@image.Id">Sil</button>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="form-group">
+        <label asp-for="NewImages" class="control-label"></label>
+        <input asp-for="NewImages" type="file" class="form-control" />
+        <span asp-validation-for="NewImages" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Güncelle" class="btn btn-primary" />
+    </div>
+</form>
+
+@section Scripts
+{
+    <script>
+        $(function () {
+            $(".btnDelete").click(function () {
+                var id = $(this).attr("data-id");
+                if (confirm("Silmek istediğinizden emin misiniz?")) {
+                    $.ajax({
+                        url: "/Product/DeleteImage/" + id,
+                        type: "DELETE",
+                        success: function (response) {
+                            $("#image_" + id).remove();
+                            console.log("Başarılı", response);
+                        },
+                        error: function (response) {
+                            console.log("Hata: ", response);
+                        }
+                    })
+                }
+            });
+        });
+
+        $(function () {
+            $("form").submit(function () {
+                var selectedIds = [];
+                var selectedNames = [];
+                $("#Categories option:selected").each(function () {
+                    selectedIds.push($(this).val());
+                    selectedNames.push($(this).text());
+                });
+
+                for (var i = 0; i < selectedIds.length; i++) {
+                    var category = {
+                        Id: selectedIds[i],
+                        Name: selectedNames[i]
+                    };
+        @Html.Raw("model.Categories.push(category);")
+                                            }
+
+                // Form submit işlemini devam ettir
+                return true;
+            });
+        });
+    </script>
+
+}

@@ -1,0 +1,203 @@
+﻿@model List<BasketListModel>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Basket List</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        img.product-image {
+            max-width: 100px;
+            max-height: 100px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <h1>Basket List</h1>
+    <div>
+        <input type="text" id="couponInput" placeholder="Kupon Kodu">
+        <button onclick="activateCoupon()">Aktifleştir</button>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+                <th>Images</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ProductName</td>
+                    <td>@item.Quantity</td>
+                    <td id="totalPrice">@item.TotalPrice</td>
+                    <td>
+                        @foreach (var image in item.Images)
+                        {
+                            <img class="product-image" src="@image.Path" />
+                        }
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btnDecrease" data-id="@item.ProductId">
+                            <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="btn btn-success btnAdd" data-id="@item.ProductId">
+                            <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button id="completeShopping" class="btn btn-danger">Alışverişi Tamamla</button>
+
+</body>
+
+</html>
+
+
+@section Scripts {
+    <script>
+        $(function () {
+            $(".btnDecrease").click(function () {
+                var id = $(this).attr("data-id");
+                var quantity = 1;
+                console.log("Ürün ID'si:", id);
+                if (confirm("Silmek istediğinize emin misiniz?")) {
+                    var product = {
+                        ProductId: id,
+                        Quantity: quantity,
+                    };
+                    $.ajax({
+                        type: "POST",
+                        data: JSON.stringify(product),
+                        url: "/Basket/Delete",
+                        contentType: "application/json",
+                        success: function (response) {
+                            console.log("Başarılı", response);
+                            refreshBasketList();
+                        },
+                        error: function (response) {
+                            console.log("Hata: ", response);
+                        }
+                    });
+                }
+            });
+        });
+
+        $(function () {
+            $(".btnAdd").click(function () {
+                var id = $(this).attr("data-id");
+                var quantity = 1;
+                console.log("Ürün ID'si:", id);
+                if (confirm("Eklemek istediğinize emin misiniz?")) {
+                    var product = {
+                        ProductId: id,
+                        Quantity: quantity,
+                    };
+                    $.ajax({
+                        type: "POST",
+                        data: JSON.stringify(product),
+                        url: "/Basket/Create",
+                        contentType: "application/json",
+                        success: function (response) {
+                            console.log("Başarılı", response);
+                            refreshBasketList();
+                        },
+                        error: function (response) {
+                            console.log("Hata: ", response);
+                        }
+                    });
+                }
+            });
+        });
+
+        function refreshBasketList() {
+            $.ajax({
+                url: "/Basket/Index",
+                type: "GET",
+                success: function (response) {
+                    $("body").html(response);
+                },
+                error: function (response) {
+                    console.log("Hata: ", response);
+                }
+            });
+        }
+
+        $(function () {
+            $("#completeShopping").click(function () {
+                if (confirm("Alışverişi tamamlamak istediğinize emin misiniz?")) {
+                    $.ajax({
+                        url: "/Basket/Clear",
+                        type: "DELETE",
+                        success: function (response) {
+                            console.log("Alışveriş tamamlandı.", response);
+                            refreshBasketList();
+                            postActivatedCoupons();
+                        },
+                        error: function (response) {
+                            console.log("Hata: ", response);
+                        }
+                    });
+                }
+            });
+        });
+
+        function activateCoupon() {
+            var couponCode = document.getElementById("couponInput").value;
+            console.log("couponCode:", couponCode);
+            $.ajax({
+                type: "POST",
+                data: JSON.stringify(couponCode),
+                url: "/Coupon/ApplyCoupon",
+                contentType: "application/json",
+                success: function (mappedCoupon) {
+                    console.log("Success:", mappedCoupon);
+                    var totalPriceElement = document.getElementById('totalPrice');
+                    totalPriceElement.textContent = mappedCoupon.discountedPrice;
+                    document.getElementById("couponInput").value = "";
+
+                    var activatedCoupons = JSON.parse(localStorage.getItem('activatedCoupons')) || [];
+                    activatedCoupons.push(couponCode);
+                    localStorage.setItem('activatedCoupons', JSON.stringify(activatedCoupons));
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                    alert(xhr.responseText);
+                }
+            });
+        }
+
+        function postActivatedCoupons() {
+            var activatedCoupons = JSON.parse(localStorage.getItem('activatedCoupons')) || [];
+            $.ajax({
+                type: "POST",
+                data: JSON.stringify(activatedCoupons),
+                url: "/Coupon/ActivateCoupons",
+                contentType: "application/json",
+                success: function (response) {
+                    console.log("Kupon kodları başarıyla Controller'a gönderildi.");
+                    localStorage.removeItem('activatedCoupons');
+                },
+                error: function (error) {
+                    console.error('Hata:', error);
+                }
+            });
+        }
+    </script>
+}
