@@ -68,7 +68,17 @@
                             }
                         }
                     </td>
-                    <td>@product.Price</td>
+                    <td>
+                        @if (product.Campaigns.Any(c => c.DiscountedPrice > 0))
+                        {
+                            @product.Campaigns.Where(c => c.DiscountedPrice > 0).Select(c => c.DiscountedPrice).First()
+
+                        }
+                        else
+                        {
+                            @product.Price
+                        }
+                    </td>
                     <td>
                         <button type="button" class="btn btn-danger btnDelete" data-id="@product.Id">
                             <i class="fa fa-minus-circle" aria-hidden="true"></i>

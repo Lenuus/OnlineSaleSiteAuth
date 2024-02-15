@@ -20,5 +20,8 @@ namespace OnlineSaleSiteAuth.Models.Product
         public List<ProductListCategoryModel> Categories { get; set; } = new List<ProductListCategoryModel>();
 
         public List<ProductListImageModel> Images { get; set; } = new List<ProductListImageModel>();
+
+        public List<ProductListCampaignModel> Campaigns { get; set; }
+
     }
 }

@@ -25,5 +25,7 @@ namespace OnlineSaleSiteAuth.Application.Service.Product.Dtos
 
         public List<ProductListImageDto> Images { get; set; } = new List<ProductListImageDto>();
 
+        public List<ProductListCampaignDto> Campaigns { get; set; } = new List<ProductListCampaignDto>();
+
     }
 }

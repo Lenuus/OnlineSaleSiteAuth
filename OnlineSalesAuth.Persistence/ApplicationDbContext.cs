@@ -20,10 +20,10 @@ namespace OnlineSalesAuth.Persistence
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
-
         public DbSet<Image> Images { get; set; }
-
         public DbSet<Coupon> Coupons { get; set; }
+        public DbSet<Campaign> Campaigns { get; set; }
+        public DbSet<ProductCampaign> ProductCampaigns { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -43,6 +43,8 @@ namespace OnlineSalesAuth.Persistence
             modelBuilder.Entity<Product>().Property(p => p.IsDeleted).HasDefaultValue(false);
             modelBuilder.Entity<ProductCategory>().Property(p => p.IsDeleted).HasDefaultValue(false);
             modelBuilder.Entity<Coupon>().Property(p => p.IsDeleted).HasDefaultValue(false);
+            modelBuilder.Entity<Campaign>().Property(p => p.IsDeleted).HasDefaultValue(false);
+            modelBuilder.Entity<ProductCampaign>().Property(p => p.IsDeleted).HasDefaultValue(false);
             modelBuilder.Entity<Coupon>().Property(p => p.Used).HasDefaultValue(false);
 
 
@@ -53,6 +55,8 @@ namespace OnlineSalesAuth.Persistence
             modelBuilder.Entity<OrderDetail>().HasOne(p => p.Order).WithMany(p => p.OrderDetails).HasForeignKey(p => p.OrderId).OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<OrderDetail>().HasOne(p => p.Product).WithMany(p => p.OrderDetails).HasForeignKey(p => p.ProductId).OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Coupon>().HasOne(p => p.Product).WithMany(p => p.Coupons).HasForeignKey(p => p.ProductId).OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<ProductCampaign>().HasOne(p => p.Product).WithMany(p=>p.Campaigns).HasForeignKey(p=>p.ProductId).OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<ProductCampaign>().HasOne(p=>p.Campaign).WithMany(p=>p.Products).HasForeignKey(P=>P.CampaignId).OnDelete(DeleteBehavior.NoAction);
         }
 
     }

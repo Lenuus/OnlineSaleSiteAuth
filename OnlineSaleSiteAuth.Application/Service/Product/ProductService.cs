@@ -138,7 +138,7 @@ namespace OnlineSaleSiteAuth.Application.Service.Product
         {
             var query = await _productRepository.GetAll()
                 .Include(f => f.Images)
-                .Include(f => f.Categories).ThenInclude(f => f.Category)
+                .Include(f => f.Categories).ThenInclude(f => f.Category).Include(f=>f.Campaigns).ThenInclude(f=>f.Campaign)
                 .Where(x => !x.IsDeleted &&
                             (!string.IsNullOrEmpty(request.Search) ? x.Name.Contains(request.Search) : true) &&
                             (request.Categories.Any() ? request.Categories.Any(y => x.Categories.Any(k => k.CategoryId == y && !k.IsDeleted)) : true))
@@ -155,6 +155,12 @@ namespace OnlineSaleSiteAuth.Application.Service.Product
                     Images = f.Images.Where(d => !d.IsDeleted).OrderBy(d => d.DisplayOrder).Select(i => new ProductListImageDto
                     {
                         Path = i.Path
+                    }).ToList(),
+                    Campaigns=f.Campaigns.Where(c => !c.IsDeleted && c.Campaign.StartDate<=DateTime.UtcNow && c.Campaign.EndDate>= DateTime.UtcNow).Select(ca=> new ProductListCampaignDto
+                    {
+                        DiscountRate=ca.Campaign.DiscountRate,
+                        DiscountedPrice=f.Price-((ca.Campaign.DiscountRate*f.Price)/100),
+                     
                     }).ToList(),
                     Price = f.Price,
                     Stock = f.Stock,

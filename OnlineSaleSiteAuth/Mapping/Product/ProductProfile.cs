@@ -32,6 +32,8 @@ namespace OnlineSaleSiteAuth.Mapping.Show
 
             CreateMap<ProductListImageDto, UpdateProductRequestImageModel>();
 
+            CreateMap<ProductListCampaignDto, ProductListCampaignModel>();
+
         }
     }
 }

@@ -18,9 +18,10 @@ namespace OnlineSaleSiteAuth.Domain
         public int Stock { get; set; }
         public bool IsDeleted { get; set; }
         public List<ProductCategory> Categories { get; set; } = new List<ProductCategory>();
-        public List<OrderDetail> OrderDetails { get; set; }
+        public List<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
         public List<Image> Images { get; set; } = new List<Image>();
-        public List<Coupon> Coupons { get; set; }= new List<Coupon>();
+        public List<Coupon> Coupons { get; set; } = new List<Coupon>();
+        public List<ProductCampaign> Campaigns { get; set; } = new List<ProductCampaign>();
     }
 
 }
