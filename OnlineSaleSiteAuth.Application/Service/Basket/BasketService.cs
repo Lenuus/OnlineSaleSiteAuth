@@ -48,13 +48,13 @@ namespace OnlineSaleSiteAuth.Application.Service.Basket
                 {
                     var existingQuantity = existedBasket.First(f => f.ProductId == productId).Quantity;
 
-                    if (existingQuantity<product.Stock)
+                    if (existingQuantity < product.Stock)
                     {
                         existedBasket.FirstOrDefault(f => f.ProductId == productId)!.Quantity += quantity;
                     }
                     else
                     {
-                        return new ServiceResponse(false,"Stocks are limited");
+                        return new ServiceResponse(false, "Stocks are limited");
 
                     }
                 }
@@ -155,23 +155,34 @@ namespace OnlineSaleSiteAuth.Application.Service.Basket
                 var basketList = new List<BasketListDto>();
                 existedBasket.ForEach(f =>
                 {
-
-                    var product = _productRepository.GetAll().Include(f => f.Images).FirstOrDefault(x => x.Id == f.ProductId);
+                    var product = _productRepository.GetAll().Include(f => f.Images).Include(f => f.Campaigns).ThenInclude(f => f.Campaign).FirstOrDefault(x => x.Id == f.ProductId);
                     basketList.Add(new BasketListDto
                     {
                         ProductId = f.ProductId,
                         Quantity = f.Quantity,
                         ProductName = product.Name,
+                        Campaigns = product.Campaigns.Where(c => !c.IsDeleted && c.Campaign.StartDate <= DateTime.UtcNow && c.Campaign.EndDate >= DateTime.UtcNow).Select(ca => new BasketListCampaignDto
+                        {
+                            DiscountedPrice = product.Price - ((ca.Campaign.DiscountRate * product.Price) / 100),
+                            DiscountedTotalPrice = f.Quantity * (product.Price - ((ca.Campaign.DiscountRate * product.Price) / 100)),
+                        }).ToList(),
                         TotalPrice = product.Price * f.Quantity,
                         Images = product.Images.Where(d => !d.IsDeleted).Select(i => new ProductListImageDto
                         {
                             Path = i.Path
                         }).ToList()
                     });
+
+                    if (basketList.Last().Campaigns.Any(c => c.DiscountedPrice != 0))
+                    {
+                        basketList.Last().TotalPrice = basketList.Last().Campaigns.Sum(c => c.DiscountedTotalPrice);
+                    }
+
                 });
                 return new ServiceResponse<List<BasketListDto>>(basketList);
             }
         }
+
         public async Task<ServiceResponse> ClearBasket()
         {
             var userId = _httpContext.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

@@ -14,6 +14,7 @@ namespace OnlineSaleSiteAuth.Application.Service.Basket.Dtos
         public int Quantity { get; set; }
         public decimal TotalPrice { get; set; }
         public List<ProductListImageDto> Images { get; set; } = new List<ProductListImageDto>();
+        public List<BasketListCampaignDto> Campaigns { get; set; }
 
     }
 }

@@ -12,11 +12,9 @@ namespace OnlineSaleSiteAuth.Domain
         public Guid Id { get; set; }
         [Required]
         public Guid CampaignId { get; set; }
-
         public Campaign Campaign { get; set; }
         [Required]
         public Guid ProductId { get; set; }
-
         public Product Product { get; set; }
         public decimal DiscountedPrice { get; set; }
 

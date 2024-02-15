@@ -14,6 +14,7 @@ namespace OnlineSaleSiteAuth.Mapping.Basket
         {
             CreateMap<BasketListDto, BasketListModel>();
             CreateMap<ProductListImageDto, ProductListImageModel>();
+            CreateMap<BasketListCampaignDto, BasketListCampaignModel>();
             CreateMap<BasketListSessionModel, BasketListSessionDto>();
         }
     }

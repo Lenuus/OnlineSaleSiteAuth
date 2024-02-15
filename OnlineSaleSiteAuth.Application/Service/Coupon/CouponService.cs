@@ -22,6 +22,7 @@ namespace OnlineSaleSiteAuth.Application.Service.Coupon
         private readonly IClaimManager _claimManager;
         private readonly IRepository<Domain.Product> _productRepository;
         private readonly IRepository<Domain.Coupon> _couponRepository;
+        private readonly IRepository<Domain.ProductCampaign> _productCampaignRepository;
 
         public CouponService(IRepository<Domain.Product> productRepository, IClaimManager claimManager, IMapper mapper, IHttpContextAccessor httpContext, IRepository<Domain.Coupon> couponRepository)
         {
@@ -70,21 +71,38 @@ namespace OnlineSaleSiteAuth.Application.Service.Coupon
             if (coupon != null)
             {
                 var productId = coupon.ProductId;
-                var product = await _productRepository.GetById(productId);
+                var product = _productRepository.GetAll()
+             .Include(p => p.Campaigns)
+             .ThenInclude(c => c.Campaign)
+             .FirstOrDefault(p => !p.IsDeleted && p.Id == productId);
 
-                var userId = _httpContext.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                var basketKey = $"Basket_{userId}";
-                byte[] basket = null;
-                if (!_httpContext.HttpContext.Session.TryGetValue(basketKey, out basket))
-                {
-                    return new ServiceResponse<AppliedCouponDto>(null, false, "Basket not found in session");
-                }
 
-                var basketJson = Encoding.UTF8.GetString(basket);
-                var basketItems = JsonConvert.DeserializeObject<List<BasketListSessionDto>>(basketJson);
-                var itemQuantity = basketItems.FirstOrDefault(f => f.ProductId == productId).Quantity;
                 if (product != null)
                 {
+                    var DiscountRateCampaign = product.Campaigns.FirstOrDefault(c => c.Campaign.DiscountRate != 0);
+                    if (DiscountRateCampaign != null)
+                    {
+                        product.Price = product.Price - ((product.Price * DiscountRateCampaign.Campaign.DiscountRate) / 100);
+                    }
+                    #region
+                    //var campaignWithDiscountedPrice = product.Campaigns.FirstOrDefault(c => c.DiscountedPrice != 0);
+                    //if (campaignWithDiscountedPrice != null)
+                    //{
+                    //    product.Price = campaignWithDiscountedPrice.DiscountedPrice;
+                    //}    Kampanya ekleme sistemi eklenince dönüp bakılacak
+                    #endregion
+                    var userId = _httpContext.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                    var basketKey = $"Basket_{userId}";
+                    byte[] basket = null;
+                    if (!_httpContext.HttpContext.Session.TryGetValue(basketKey, out basket))
+                    {
+                        return new ServiceResponse<AppliedCouponDto>(null, false, "Basket not found in session");
+                    }
+
+                    var basketJson = Encoding.UTF8.GetString(basket);
+                    var basketItems = JsonConvert.DeserializeObject<List<BasketListSessionDto>>(basketJson);
+                    var itemQuantity = basketItems.FirstOrDefault(f => f.ProductId == productId)?.Quantity ?? 0;
+
                     var itemPrice = product.Price * itemQuantity;
                     var discountRate = coupon.DiscountRate;
                     var newPrice = itemPrice - ((itemPrice * discountRate) / 100);
@@ -100,14 +118,15 @@ namespace OnlineSaleSiteAuth.Application.Service.Coupon
                 }
                 else
                 {
-                    return new ServiceResponse<AppliedCouponDto>(null, false, "Not Found");
+                    return new ServiceResponse<AppliedCouponDto>(null, false, "Product not found");
                 }
             }
             else
             {
-                return new ServiceResponse<AppliedCouponDto>(null, false, "Not Found or Expired");
+                return new ServiceResponse<AppliedCouponDto>(null, false, "Coupon not found or expired");
             }
         }
+
         public async Task<ServiceResponse> CheckCoupon(string Coupon)
         {
             var existedCoupon = _couponRepository.GetAll().FirstOrDefault(f => f.CouponCode == Coupon);

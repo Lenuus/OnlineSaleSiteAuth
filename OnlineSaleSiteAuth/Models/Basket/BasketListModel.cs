@@ -10,6 +10,8 @@ namespace OnlineSaleSiteAuth.Models.Basket
         public int Quantity { get; set; }
         public decimal TotalPrice { get; set; }
         public List<ProductListImageModel> Images { get; set; } = new List<ProductListImageModel>();
+        public List<BasketListCampaignModel> Campaigns { get; set; }
+
     }
-    
+
 }
