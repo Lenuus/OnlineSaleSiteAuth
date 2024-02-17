@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Hosting;
 using OnlineSaleSiteAuth.Application.Service.File;
 using OnlineSaleSiteAuth.Application.Service.Basket;
 using OnlineSaleSiteAuth.Application.Service.Coupon;
+using OnlineSaleSiteAuth.Application.Service.Campaign;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,6 +40,8 @@ builder.Services.AddTransient<ICategoryService, CategoryService>();
 builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<IBasketService, BasketService>();
 builder.Services.AddTransient<ICouponService, CouponService>();
+builder.Services.AddTransient<ICampaignService, CampaignService>();
+
 
 
 builder.Services.AddSession();

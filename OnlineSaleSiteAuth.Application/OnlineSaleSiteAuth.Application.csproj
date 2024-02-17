@@ -19,8 +19,4 @@
     <ProjectReference Include="..\OnlineSaleSiteAuth.Domain\OnlineSaleSiteAuth.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Service\Campaign\Dtos\" />
-  </ItemGroup>
-
 </Project>
