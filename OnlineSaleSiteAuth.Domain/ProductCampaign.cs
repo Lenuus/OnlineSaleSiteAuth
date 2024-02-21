@@ -17,7 +17,6 @@ namespace OnlineSaleSiteAuth.Domain
         public Guid ProductId { get; set; }
         public Product Product { get; set; }
         public decimal DiscountedPrice { get; set; }
-
         public bool IsDeleted { get; set; }
     }
 }

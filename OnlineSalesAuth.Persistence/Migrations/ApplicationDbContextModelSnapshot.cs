@@ -111,6 +111,28 @@ namespace OnlineSalesAuth.Persistence.Migrations
                     b.ToTable("Coupons");
                 });
 
+            modelBuilder.Entity("OnlineSaleSiteAuth.Domain.CustomPage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("HtmlContent")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CustomPages");
+                });
+
             modelBuilder.Entity("OnlineSaleSiteAuth.Domain.Image", b =>
                 {
                     b.Property<Guid>("Id")
@@ -118,10 +140,14 @@ namespace OnlineSalesAuth.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("DisplayOrder")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");

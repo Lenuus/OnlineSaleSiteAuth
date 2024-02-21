@@ -61,7 +61,7 @@
                     <span>Resimler: </span>
                 </div>
                 <div class="col-md-12" style="margin-top: -5px;">
-                    <input asp-for="Images" type="file" multiple class="form-control ms-0" accept="image/jpeg, image/png" />
+                    <input asp-for="Images" type="file" id="Images" multiple class="form-control ms-0" accept="image/jpeg, image/png" />
                     <span asp-validation-for="Images" class="text-danger"></span>
                 </div>
             </div>
@@ -73,3 +73,35 @@
         </div>
     </div>
 </form>
+
+@section scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var fileInput = document.getElementById('Images');
+            fileInput.addEventListener('change', function (event) {
+                var files = event.target.files;
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    var reader = new FileReader();
+                    reader.onload = function (readerEvent) {
+                        var image = new Image();
+                        image.onload = function () {
+                            var cropper = new Cropper(image, {
+                                aspectRatio: 1,
+                                width: 200,
+                                height: 200,
+                                crop: function (event) 
+                                {
+                                    var croppedCanvas = cropper.getCroppedCanvas();
+                                }
+                            });
+                        };
+                        image.src = readerEvent.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
+}
+

@@ -24,6 +24,7 @@ namespace OnlineSalesAuth.Persistence
         public DbSet<Coupon> Coupons { get; set; }
         public DbSet<Campaign> Campaigns { get; set; }
         public DbSet<ProductCampaign> ProductCampaigns { get; set; }
+        public DbSet<CustomPage> CustomPages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -45,7 +46,10 @@ namespace OnlineSalesAuth.Persistence
             modelBuilder.Entity<Coupon>().Property(p => p.IsDeleted).HasDefaultValue(false);
             modelBuilder.Entity<Campaign>().Property(p => p.IsDeleted).HasDefaultValue(false);
             modelBuilder.Entity<ProductCampaign>().Property(p => p.IsDeleted).HasDefaultValue(false);
+            modelBuilder.Entity<CustomPage>().Property(p => p.IsDeleted).HasDefaultValue(false);
             modelBuilder.Entity<Coupon>().Property(p => p.Used).HasDefaultValue(false);
+            modelBuilder.Entity<Image>().Property(p => p.IsDeleted).HasDefaultValue(false);
+            modelBuilder.Entity<Image>().Property(p => p.DisplayOrder).HasDefaultValue(0);
 
 
             modelBuilder.Entity<ProductCategory>().HasOne(p => p.Product).WithMany(p => p.Categories).HasForeignKey(p => p.ProductId).OnDelete(DeleteBehavior.NoAction);
