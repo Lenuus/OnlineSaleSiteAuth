@@ -8,11 +8,13 @@ using System.Threading.Tasks;
 
 namespace OnlineSaleSiteAuth.Application.Service.CustomPage
 {
-    public interface ICustomPage
+    public interface ICustomPageService
     {
         Task<ServiceResponse> CreateCustomPage(CreateCustomPageDto request);
 
-        Task<ServiceResponse<CustomPageDetail>> GetAllCustomPage();
+        Task<ServiceResponse<List<CustomPageDetailDto>>> GetAllCustomPage();
+
+        Task<ServiceResponse<CustomPageDetailDto>> GetCustomPage(Guid id);
 
     }
 }

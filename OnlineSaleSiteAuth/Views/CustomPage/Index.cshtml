@@ -1,0 +1,16 @@
+﻿@model CreateCustomPageModel
+
+<!DOCTYPE html>
+<html>
+
+<body>
+    <div>
+        <text>@Html.Raw(Model.Title)</text>
+    </div>
+
+    <h2> Content:</h2>
+    <div>
+        @Html.Raw(Model.HtmlContent)
+    </div>
+</body>
+</html>

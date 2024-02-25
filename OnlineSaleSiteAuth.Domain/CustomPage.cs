@@ -10,9 +10,9 @@ namespace OnlineSaleSiteAuth.Domain
     public class CustomPage : IBaseEntity, ISoftDeletable
     {
         public Guid Id { get; set; }
-        [AllowHtml]
+
         public string Title { get; set; }
-        [AllowHtml]
+
         public string HtmlContent { get; set; }
 
         public bool IsDeleted { get; set; }

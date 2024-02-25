@@ -7,7 +7,7 @@
 <div id="cartContainer" style="float:right; margin-top: 20px; height:200px">
     <a href="/Basket/Index" class="btn btn-lg position-relative" id="cartButton">
         <i class="fa fa-shopping-cart fa-2x" aria-hidden="true"></i>
-        <span id="cartCount" class="badge rounded-pill bg-danger position-absolute top-0 
+        <span id="cartCount" class="badge rounded-pill bg-danger position-absolute top-0
 
 -100 translate-middle p-1" style="font-size: 0.8em;">
             @ViewBag.TotalItemCount
@@ -30,73 +30,56 @@
             </div>
         </div>
     </div>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Order</th>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Stock</th>
-                <th>Category</th>
-                <th>Price</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="container">
+
+        <div class="row">
             @{
                 var counter = 1;
             }
-
             @foreach (var product in Model.Data)
             {
-                <tr id="product_@product.Id">
-                    <td>
-                        @counter
-                    </td>
-                    <td>
+                counter++;
+                <div class="col-md-3 mb-4" id="product_@product.Id">
+                    <div class="card">
                         @foreach (var i in product.Images)
                         {
-                            <img src="@i.Path" style="max-width: 100px; max-height: 100px;" />
-                        }
-                    </td>
-                    <td>@product.Name</td>
-                    <td>@product.Stock</td>
-                    <td>
-                        @foreach (var c in product.Categories)
-                        {
-                            @c.Name
-                            if (product.Categories.IndexOf(c) != product.Categories.Count - 1)
-                            {
-                                @:,
-                            }
-                        }
-                    </td>
-                    <td>
-                        @if (product.Campaigns.Any(c => c.DiscountedPrice > 0))
-                        {
-                            @product.Campaigns.Where(c => c.DiscountedPrice > 0).Select(c => c.DiscountedPrice).First()
+                            <img src="@i.Path" class="card-img-top">
 
                         }
-                        else
-                        {
-                            @product.Price
-                        }
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-danger btnDelete" data-id="@product.Id">
-                            <i class="fa fa-minus-circle" aria-hidden="true"></i>
-                        </button>
-                        <button type="button" class="btn btn-success btnAdd" data-id="@product.Id">
-                            <i class="fa fa-plus-square-o" aria-hidden="true"></i>
-                        </button>
-                        <a href="/Product/Update/@product.Id" class="btn btn-primary">
-                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                        </a>
-                    </td>
-                </tr>
-                counter++;
+                        <div class="card-body">
+                            <h5 class="card-title">@product.Name</h5>
+                            <p class="card-text">@product.Name</p>
+                            <p class="card-text">
+                                <strong>Price:</strong>
+                                @if (product.Campaigns.Any(c => c.DiscountedPrice > 0))
+                                {
+                                    @product.Campaigns.Where(c => c.DiscountedPrice > 0).Select(c => c.DiscountedPrice).First()
+                                }
+                                else
+                                {
+                                    @product.Price
+                                }
+                            </p>
+                            <button type="button" class="btn btn-success btnAdd" data-id="@product.Id">
+                                <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+                            </button>
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                            {
+                                <button type="button" class="btn btn-danger btnDelete" data-id="@product.Id">
+                                    <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                </button>
+                                <a href="/Product/Update/@product.Id" class="btn btn-primary">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+
             }
-        </tbody>
-    </table>
+        </div>
+    </div>
+
     <div style="float:left;">
         @for (int i = 0; i < Model.TotalPage; i++)
         {

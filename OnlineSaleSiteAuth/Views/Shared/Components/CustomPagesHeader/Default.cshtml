@@ -1,0 +1,12 @@
+﻿@using OnlineSaleSiteAuth.Application.Service.CustomPage.Dtos
+@model List<CustomPageDetailDto>
+<div class="container" id="custom-pages">
+    <ul>
+        @foreach (var customPage in Model)
+        {
+            <li>
+                <a href="@Url.Action("Index", "CustomPage", new { id = customPage.Id})">@customPage.Title</a>
+            </li>
+        }
+    </ul>
+</div>

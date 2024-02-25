@@ -170,7 +170,7 @@ namespace OnlineSaleSiteAuth.Application.Service.Product
 
         public async Task<ServiceResponse<ProductListDto>> GetProductById(Guid id)
         {
-            var query = await _productRepository.GetAll()
+            var query = await _productRepository.GetAll().Where(f=>!f.IsDeleted && f.Id==id)
                 .Include(f => f.Categories)
                 .Include(f => f.Images)
                 .Select(f => new ProductListDto
