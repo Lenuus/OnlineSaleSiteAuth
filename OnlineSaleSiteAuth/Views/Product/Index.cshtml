@@ -41,11 +41,30 @@
                 counter++;
                 <div class="col-md-3 mb-4" id="product_@product.Id">
                     <div class="card">
-                        @foreach (var i in product.Images)
-                        {
-                            <img src="@i.Path" class="card-img-top">
 
-                        }
+                        <div id="carousel_@product.Id" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                @{
+                                    var firstImage = product.Images.FirstOrDefault();
+                                }
+
+                                @foreach (var i in product.Images)
+                                {
+                                    <div class="carousel-item @(i == firstImage ? "active" : "")">
+                                        <img class="d-block w-100" src="@i.Path">
+                                    </div>
+                                }
+
+                            </div>
+                            <a class="carousel-control-prev" href="#carousel_@product.Id" role="button" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carousel_@product.Id" role="button" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
                         <div class="card-body">
                             <h5 class="card-title">@product.Name</h5>
                             <p class="card-text">@product.Name</p>
@@ -75,8 +94,8 @@
                         </div>
                     </div>
                 </div>
-
             }
+
         </div>
     </div>
 
@@ -107,6 +126,7 @@
         </!option>
     </select>
 </form>
+
 
 @section Scripts
 {
@@ -142,7 +162,6 @@
             });
         }
 
-
         $(function () {
             $(".btnAdd").click(function () {
                 var id = $(this).attr("data-id");
@@ -170,6 +189,12 @@
                 }
             });
         });
+
+        $(document).ready(function () {
+            $('.carousel').carousel("cycle")
+            interval: 2000
+        });
+
         function updateCartContent() {
             $.ajax({
                 url: "/Basket/GetCount",
