@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using OnlineSaleSiteAuth.Application.Service.Basket;
 using OnlineSaleSiteAuth.Application.Service.Basket.Dtos;
 using OnlineSaleSiteAuth.Domain;
@@ -14,7 +15,8 @@ namespace OnlineSaleSiteAuth.Controllers
         private readonly IBasketService _basketService;
         private readonly IMapper _mapper;
         private readonly UserManager<User> _userManager;
-        public BasketController(IBasketService basketService, IMapper mapper, UserManager<User> userManager)
+
+        public BasketController(IBasketService basketService, IMapper mapper, UserManager<User> userManager, IDistributedCache redisCache)
         {
             _basketService = basketService;
             _mapper = mapper;

@@ -14,10 +14,11 @@ using OnlineSaleSiteAuth.Application.Service.Basket;
 using OnlineSaleSiteAuth.Application.Service.Coupon;
 using OnlineSaleSiteAuth.Application.Service.Campaign;
 using OnlineSaleSiteAuth.Application.Service.CustomPage;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddDbContext<ApplicationDbContext>(
     option => option
@@ -44,10 +45,12 @@ builder.Services.AddTransient<ICouponService, CouponService>();
 builder.Services.AddTransient<ICampaignService, CampaignService>();
 builder.Services.AddTransient<ICustomPageService, CustomPageService>();
 
-
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("RedisConnection");
+});
 
 builder.Services.AddSession();
-
 
 builder.Services.ConfigureApplicationCookie(options =>
 {

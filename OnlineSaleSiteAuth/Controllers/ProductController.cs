@@ -35,6 +35,14 @@ namespace OnlineSaleSiteAuth.Controllers
 
         public async Task<IActionResult> Index(GetAllProductRequestModel request)
         {
+            var categories = await _categoryService.GetAllCategory().ConfigureAwait(false);
+            var categoryList = categories.Data.Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = c.Name
+            }).ToList();
+            ViewBag.Categories = new SelectList(categoryList, "Value", "Text");
+
             var mappedRequest = _mapper.Map<GetAllProductRequestDto>(request);
             var response = await _productService.GetAllProducts(mappedRequest).ConfigureAwait(false);
             if (response == null)
