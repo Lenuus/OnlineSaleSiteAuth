@@ -12,6 +12,8 @@ namespace OnlineSaleSiteAuth.Application.Service.Product.Dtos
     {
         public decimal DiscountRate { get; set; }
         public decimal DiscountedPrice { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
 
     }
 }

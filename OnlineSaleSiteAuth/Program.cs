@@ -15,6 +15,8 @@ using OnlineSaleSiteAuth.Application.Service.Coupon;
 using OnlineSaleSiteAuth.Application.Service.Campaign;
 using OnlineSaleSiteAuth.Application.Service.CustomPage;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
+using OnlineSaleSiteAuth.Application.Service.ElasticSearch;
+using OnlineSaleSiteAuth.Common.Helpers;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,6 +34,7 @@ builder.Services.AddDefaultIdentity<User>(options =>
 })
     .AddRoles<Role>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddElasticSearch(builder.Configuration);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IFileService, FileService>();
@@ -44,6 +47,7 @@ builder.Services.AddTransient<IBasketService, BasketService>();
 builder.Services.AddTransient<ICouponService, CouponService>();
 builder.Services.AddTransient<ICampaignService, CampaignService>();
 builder.Services.AddTransient<ICustomPageService, CustomPageService>();
+
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {

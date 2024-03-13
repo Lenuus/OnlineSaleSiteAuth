@@ -11,11 +11,13 @@
     <PackageReference Include="AutoMapper.Collection" Version="9.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="NEST" Version="7.17.5" />
     <PackageReference Include="StackExchange.Redis" Version="2.7.27" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\OnlineSalesAuth.Persistence\OnlineSalesAuth.Persistence.csproj" />
+    <ProjectReference Include="..\OnlineSaleSiteAuth.Domain\OnlineSaleSiteAuth.Domain.csproj" />
   </ItemGroup>
 
 </Project>

@@ -24,5 +24,7 @@ namespace OnlineSaleSiteAuth.Application.Service.Product
         Task<ServiceResponse<List<ProductListDto>>> GetAllProductIds();
 
         Task<ServiceResponse> DeleteImage(Guid deleteImageId);
+
+       
     }
 }

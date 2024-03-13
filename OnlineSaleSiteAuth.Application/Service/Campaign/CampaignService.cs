@@ -33,9 +33,9 @@ namespace OnlineSaleSiteAuth.Application.Service.Campaign
             {
                 return new ServiceResponse(false, "Dates are not valid");
             }
-            var EntityMapped = _mapper.Map<Domain.Campaign>(request);
-            EntityMapped.Products.AddRange(request.Products.Select(p => new ProductCampaign { ProductId = p }));
-            await _campaignRepository.Create(EntityMapped);
+            var entityMapped = _mapper.Map<Domain.Campaign>(request);
+            entityMapped.Products.AddRange(request.Products.Select(p => new ProductCampaign { ProductId = p }));
+            await _campaignRepository.Create(entityMapped);
             return new ServiceResponse();
         }
     }

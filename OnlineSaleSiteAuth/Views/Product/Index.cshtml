@@ -2,7 +2,7 @@
 @{
     var search = @ViewContext.HttpContext.Request.Query["Search"];
     var pageIndex = @ViewContext.HttpContext.Request.Query["PageIndex"].SingleOrDefault() ?? "0";
-    var pageSize = @ViewContext.HttpContext.Request.Query["PageSize"].SingleOrDefault() ?? int.MaxValue.ToString();
+    var pageSize = @ViewContext.HttpContext.Request.Query["PageSize"].SingleOrDefault() ?? "50";
     var categories = ViewContext.HttpContext.Request.Query["Categories"].ToArray();
 }
 <div id="cartContainer" style="float:right; margin-top: 20px; height:200px">
