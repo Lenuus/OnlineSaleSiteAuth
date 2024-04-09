@@ -1,16 +1,18 @@
 ﻿@model PagedResponseModel<ProductListModel>
 @{
+    ViewData["Title"] = "Products";
+}
+@{
     var search = @ViewContext.HttpContext.Request.Query["Search"];
     var pageIndex = @ViewContext.HttpContext.Request.Query["PageIndex"].SingleOrDefault() ?? "0";
     var pageSize = @ViewContext.HttpContext.Request.Query["PageSize"].SingleOrDefault() ?? "50";
     var categories = ViewContext.HttpContext.Request.Query["Categories"].ToArray();
 }
-<div id="cartContainer" style="float:right; margin-top: 20px; height:200px">
-    <a href="/Basket/Index" class="btn btn-lg position-relative" id="cartButton">
-        <i class="fa fa-shopping-cart fa-2x" aria-hidden="true"></i>
-        <span id="cartCount" class="badge rounded-pill bg-danger position-absolute top-0
 
--100 translate-middle p-1" style="font-size: 0.8em;">
+<div id="cartContainer" style="float:right; margin-top: 20px;">
+    <a href="/Basket/Index" class="btn btn-lg position-relative" id="cartButton">
+        <i class="fa-sharp fa-solid fa-cart-shopping"></i>
+        <span id="cartCount" class="badge rounded-pill bg-danger position-absolute top-0-100 translate-middle p-1" style="font-size: 0.8em;">
             @ViewBag.TotalItemCount
         </span>
     </a>
@@ -20,24 +22,30 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-                <div class="input-group"> 
-                  <input type="text" name="Search" value="@search" class="form-control" style="margin-bottom: 20px;" placeholder="Search..." />
-                    <select name="Categories" class="form-control" multiple>
-                        <option value="">-- Kategoriler --</option >
-                        @foreach (var category in ViewBag.Categories)
-                        {
-                            <option value="@category.Value">@category.Text</option>
-                        }
-                    </select>
-                    <div class="input-group-append ml-2">
-                        <button type="submit" class="btn btn-primary">
+                <div class="input-group">
+                    <input type="text" name="Search" value="@search" class="form-control" style="margin-bottom: 20px; padding-right:10px;" placeholder="Search..." />
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary" style="border-radius:0;">
                             <i class="fa fa-search" aria-hidden="true"></i>
                         </button>
                     </div>
                 </div>
             </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <select name="Categories" class="form-control" multiple>
+                        <option value="">-- Kategoriler --</option>
+                        @foreach (var category in ViewBag.Categories)
+                        {
+                            <option value="@category.Value">@category.Text</option>
+                        }
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
+
+
     <div class="container">
 
         <div class="row">
@@ -138,83 +146,5 @@
 
 @section Scripts
 {
-    <script>
-        $(document).ready(function () {
-            console.log('this is run on page load');
-            updateCartContent();
-        });
-
-        $(function () {
-            $(".btnDelete").click(function () {
-                var id = $(this).attr("data-id");
-                if (confirm("Silmek istediğinizden emin misiniz?")) {
-                    $.ajax({
-                        url: "/Product/Delete/" + id,
-                        type: "DELETE",
-                        success: function (response) {
-                            $("#product_" + id).remove();
-                            console.log("Başarılı", response);
-                            updateOrderCounts();
-                        },
-                        error: function (response) {
-                            console.log("Hata: ", response);
-                        }
-                    })
-                }
-            });
-        });
-
-        function updateOrderCounts() {
-            $("tbody tr").each(function (index) {
-                $(this).find("td:first-child").text(index + 1);
-            });
-        }
-
-        $(function () {
-            $(".btnAdd").click(function () {
-                var id = $(this).attr("data-id");
-                var quantity = 1;
-                console.log("Ürün ID'si:", id);
-                if (confirm("Eklemek istediğinize emin misiniz?")) {
-                    var product = {
-                        ProductId: id,
-                        Quantity: quantity,
-                    };
-                    $.ajax({
-                        type: "POST",
-                        data: JSON.stringify(product),
-                        url: "/Basket/Create",
-                        contentType: "application/json",
-                        success: function (response) {
-                            console.log("Başarılı", response);
-                            updateCartContent()
-                        },
-                        error: function (xhr, status, error) {
-                            console.error('Error:', error);
-                            alert(xhr.responseText);
-                        }
-                    });
-                }
-            });
-        });
-
-        $(document).ready(function () {
-            $('.carousel').carousel("cycle")
-            interval: 2000
-        });
-
-        function updateCartContent() {
-            $.ajax({
-                url: "/Basket/GetCount",
-                type: "GET",
-                success: function (response) {
-                    $("#cartCount").text(response);
-                },
-                error: function (response) {
-                    console.log("Hata: ", response);
-                }
-            });
-        }
-
-    </script>
+    <script src="~/js/product/index.js"></script>
 }

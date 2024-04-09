@@ -168,10 +168,6 @@ namespace OnlineSaleSiteAuth.Application.Service.Product
         {
             var categoryIds = request.Categories.Select(d => d).ToList();
 
-            // ürün name, category
-            // ürün id
-
-            // db -> ürünler -> ürün id
             var result = _elasticClient.Search<ProductListDto>(s => s
                  .Index("product")
                  .Query(q => q
@@ -185,7 +181,9 @@ namespace OnlineSaleSiteAuth.Application.Service.Product
                  )
                  .From(request.PageSize * request.PageIndex)
                  .Take(request.PageSize)
-              ).Documents.Select(f => f.Id);
+              ).Documents;
+            var resultIds = result.Select(f => f.Id).ToList();
+
 
             var query = await _productRepository.GetAll()
                 .Include(f => f.Images)
@@ -195,7 +193,7 @@ namespace OnlineSaleSiteAuth.Application.Service.Product
                 //(!string.IsNullOrEmpty(request.Search) ? x.Name.Contains(request.Search) : true) &&
                 //            (request.Categories.Any() ? request.Categories.Any(y => x.Categories.Any(k => k.CategoryId == y && !k.IsDeleted)) : true))
                 #endregion
-                result.Contains(x.Id))
+                resultIds.Contains(x.Id))
                 .Select(f => new ProductListDto
                 {
                     Id = f.Id,

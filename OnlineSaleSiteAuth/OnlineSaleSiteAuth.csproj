@@ -39,8 +39,4 @@
     <ProjectReference Include="..\OnlineSaleSiteAuth.Common\OnlineSaleSiteAuth.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\images\" />
-  </ItemGroup>
-
 </Project>
