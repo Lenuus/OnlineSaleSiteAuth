@@ -1,14 +1,16 @@
 ﻿
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme-mode="dark">
 <!--begin::Head-->
-<head>
+<head >
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewData["Title"] - OnlineSaleSiteAuth</title>
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
     <link rel="shortcut icon" href="~/images/cart-icon.png" />
+
+
     <!--begin::Fonts(mandatory for all pages)-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
     <!--end::Fonts-->
@@ -116,8 +118,19 @@
                                         @await Component.InvokeAsync("CustomPagesHeader")
 										<!--end:Menu item-->
 									</div>
+
 									<!--end:Menu sub-->
 								</div>
+                                <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
+                                    <!--begin:Menu link-->
+                                    <a asp-area="" asp-controller="Animation" asp-action="Index" class="menu-link py-3">
+                                        <span class="menu-title">For a Good View</span>
+                                    </a>
+                                    <!--end:Menu link-->
+
+                                </div>
+
+
                             </div>
                             <!--end::Menu-->
                         </div>
