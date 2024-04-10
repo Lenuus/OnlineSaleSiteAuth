@@ -8,5 +8,10 @@ namespace OnlineSaleSiteAuth.Controllers
         {
             return View();
         }
+
+        public IActionResult WaveAnimation()
+        {
+            return View();
+        }
     }
 }
