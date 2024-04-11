@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme-mode="dark">
 <!--begin::Head-->
-<head >
+<head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewData["Title"] - OnlineSaleSiteAuth</title>
@@ -104,31 +104,48 @@
 
                                 </div>
 
-								<!--begin:Menu item-->
-								<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
-									<!--begin:Menu link-->
-									<span class="menu-link">
-										<span class="menu-title">Custom Pages</span>
-										<span class="menu-arrow d-lg-none"></span>
-									</span>
-									<!--end:Menu link-->
-									<!--begin:Menu sub-->
-									<div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-250px">
-                                        <!--begin:Menu item-->
-                                        @await Component.InvokeAsync("CustomPagesHeader")
-										<!--end:Menu item-->
-									</div>
-
-									<!--end:Menu sub-->
-								</div>
+                                <!--begin:Menu item-->
                                 <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
                                     <!--begin:Menu link-->
-                                    <a asp-area="" asp-controller="Animation" asp-action="Index" class="menu-link py-3">
-                                        <span class="menu-title">For a Good View</span>
-                                    </a>
+                                    <span class="menu-link">
+                                        <span class="menu-title">Custom Pages</span>
+                                        <span class="menu-arrow d-lg-none"></span>
+                                    </span>
                                     <!--end:Menu link-->
+                                    <!--begin:Menu sub-->
+                                    <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-250px">
+                                        <!--begin:Menu item-->
+                                        @await Component.InvokeAsync("CustomPagesHeader")
+                                        <!--end:Menu item-->
+                                    </div>
 
+                                    <!--end:Menu sub-->
                                 </div>
+                                <div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
+                                    <!--begin:Menu link-->
+                                    <span class="menu-link">
+                                        <span class="menu-title">For The Good View</span>
+                                        <span class="menu-arrow d-lg-none"></span>
+                                    </span>
+                                    <!--end:Menu link-->
+                                    <!--begin:Menu sub-->
+                                    <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-250px">
+                                        <!--begin:Menu item-->
+                                        <div class="menu-item">
+                                            <!--begin:Menu link-->
+                                            <a asp-area="" asp-controller="Animation" asp-action="Index" class="menu-link py-3">
+                                                <span class="menu-title">Circles</span>
+                                            </a>
+                                            <a asp-area="" asp-controller="Animation" asp-action="WaveAnimation" class="menu-link py-3">
+                                                <span class="menu-title">Waves</span>
+                                            </a>
+                                            <!--end:Menu link-->
+                                        </div>                                        <!--end:Menu item-->
+                                    </div>
+
+                                    <!--end:Menu sub-->
+                                </div>
+
 
 
                             </div>
